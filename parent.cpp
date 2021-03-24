@@ -26,6 +26,11 @@ Boston, MA 02111-1307, USA.
 
 	cat has no idea how it has been manipulated. One of the "Great Ideas"
 	of Unix.
+
+	Exiting the program is accomplished with ^C. When this program exits,
+	the pipe to_child will be closed. cat will receive an end-of-file 
+	when this happens. Since it is constantly reading from its end of the
+	pipe, it will notice immediately - and exit itself.
 */
 
 #include <iostream>
@@ -62,6 +67,7 @@ void Refresh() {
 void InitializeWindows() {
 	if (!initscr())
 		throw string("Curses failed to initialize");
+	// These subwindows are screen-high and half screen width.
 	tx_window = subwin(stdscr, LINES, COLS / 2 - 1, 0, 0);
 	rx_window = subwin(stdscr, LINES, COLS / 2, 0, COLS / 2);
 	// Scrolling will not work within the windows unless these calls are made.
