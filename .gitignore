@@ -1,6 +1,8 @@
 # Prerequisites
 *.d
 
+parent
+
 # Compiled Object files
 *.slo
 *.lo
