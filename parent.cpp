@@ -101,7 +101,7 @@ void InitializeWindows() {
 		whatever we send to its stdin back out its stdout (which
 		is our from_child[READ_SIDE]).
 	*/
-	execl("/bin/cat", "cat", "-", nullptr);
+	execl("/bin/cat", "/bin/cat", "-", 0);
 	throw string("Failed to exec to ./child.");
 }
 
@@ -154,8 +154,10 @@ bool GetLine(int fd, string & buffer, bool & error) {
 		}
 	}
 	if (read_return_value <= 0) {
-		if (errno != EAGAIN)
+		if (errno != EAGAIN) {
 			error = true;
+			perror("read failure");
+		}
 	}
 	return retval;
 }
