@@ -52,13 +52,13 @@ static const int READ_SIDE = 0;
 static const int WRITE_SIDE = 1;
 
 void Refresh() {
-	char * title = (char *) " Pipe Demo ";
+	char * title = static_cast<char *>(" Pipe Demo ");
 
 	box(tx_window, 0, 0);
-	mvwaddstr(tx_window, 0, 2, (char *) " TX ");
-	mvwaddstr(tx_window, LINES - 1, 2, (char *) " ^C to exit ");
+	mvwaddstr(tx_window, 0, 2, static_cast<char *>(" TX "));
+	mvwaddstr(tx_window, LINES - 1, 2, static_cast<char *>(" ^C to exit "));
 	box(rx_window, 0, 0);
-	mvwaddstr(rx_window, 0, 2, (char *) " RX ");
+	mvwaddstr(rx_window, 0, 2, static_cast<char *>(" RX "));
 	mvwaddstr(rx_window, 0, COLS / 2 - strlen(title) - 2, title);
 	wrefresh(tx_window);
 	wrefresh(rx_window);
@@ -172,11 +172,12 @@ void AddLine(WINDOW * w, char * s) {
 }
 
 int main(int argc, char ** argv) {
-	uint64_t message_counter = 0;
-	string buffer;
-	bool error = false;
 
 	try {
+		uint64_t message_counter = 0;
+		bool error = false;
+		string buffer;
+
 		InitializeWindows();
 		/*	Parent creates both pipes. One will be used to send data to
 			the child. The other will be used by the child to send data
@@ -201,13 +202,15 @@ int main(int argc, char ** argv) {
 			/* Send it and add to the TX window.
 			*/
 			write(to_child[WRITE_SIDE], s.c_str(), s.size());
+			// cppcheck-suppress cstyleCast
 			AddLine(tx_window, (char *) s.c_str());
 			/*	IF a fully assembled line is available from the child back
 				to us, add it to the RX window. After this, always check
 				for an error return from the child.
 			*/
 			if (GetLine(from_child[READ_SIDE], buffer, error)) {
-				AddLine(rx_window, (char *) buffer.c_str());
+				// cppcheck-suppress cstyleCast
+				AddLine(rx_window, (char *)buffer.c_str());
 			}
 			if (error)
 				break;
@@ -216,7 +219,7 @@ int main(int argc, char ** argv) {
 		}
 		endwin();
 	}
-	catch (const string s) {
+	catch (const string & s) {
 		cerr << s << endl;
 	}
 

@@ -1,6 +1,6 @@
 # Prerequisites
 *.d
-
+*.log
 parent
 
 # Compiled Object files
