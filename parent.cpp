@@ -59,6 +59,7 @@ void Refresh() {
 	mvwaddstr(tx_window, LINES - 1, 2, static_cast<char *>(" ^C to exit "));
 	box(rx_window, 0, 0);
 	mvwaddstr(rx_window, 0, 2, static_cast<char *>(" RX "));
+	/* Flawfinder: ignore */
 	mvwaddstr(rx_window, 0, COLS / 2 - strlen(title) - 2, title);
 	wrefresh(tx_window);
 	wrefresh(rx_window);
@@ -101,6 +102,7 @@ void InitializeWindows() {
 		whatever we send to its stdin back out its stdout (which
 		is our from_child[READ_SIDE]).
 	*/
+	/* Flawfinder: ignore */
 	execl("/bin/cat", "/bin/cat", "-", 0);
 	throw string("Failed to exec to ./child.");
 }
@@ -146,6 +148,7 @@ bool GetLine(int fd, string & buffer, bool & error) {
 		Once again, the following read() will return immediately if no 
 		characters are available.
 	*/
+	/* Flawfinder: ignore */
 	while ((read_return_value = read(fd, &c, 1)) == 1) {
 		buffer.push_back(c);
 		if (c == '\n') {
